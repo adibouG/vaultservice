@@ -1,5 +1,6 @@
+const host = '192.168.96.78' ;
 const port = 3002 ;
-const hostUrl = `http://localhost:${port}` ;
+const hostUrl = `http://${host}:${port}` ;
 
 
  function mySubmitFunc(e)
