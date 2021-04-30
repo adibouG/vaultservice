@@ -10,14 +10,14 @@ From this URL , a web form is served (designed and mostly implemented by Erik, p
 
 The API provide the following functionalities (interacting with it via the form):
 
-_**POST /encrypt :**_
+- _**POST /encrypt :**_
 
 **expects ->** _a POST request, with a body containing the hotelChain , hotelID , enzoMasterKey and the data to be encrypted._
 
 **returns ->** _a json object containing the generated fileName and the generated file content._
                     ________________________________________________
 
-_**POST /decrypt :**_
+- _**POST /decrypt :**_
 
 `Note : This functionality implementation wasn't discuss nor described , also that the approach for now as it was the quicker to implement. But according to the needs, and the use cases , maybe another approach should be implemented uploading directly the enzovault file or it's content instead of extracting the "key values" from the file.`
 
@@ -27,7 +27,7 @@ _a POST request, with a body containing the following values taken from an enzov
 **returns ->** _a json structure (array of json object) as the encrypted data contained within the enzovault file (e.g. cipherText)._
                     ________________________________________________
 
-_**GET /file/:filename :**_
+- _**GET /file/:filename :**_
 
 **expects ->** _a GET request, with the generated enzovault filename as a URL parameter (example: GET http://192.168.96.78:3002/file/xxxxxxxxxxx.enzovault)_
 
