@@ -6,7 +6,7 @@ An https server version can be used, (using aws without any changes or a locally
 
 This application (based on this repo) is actually running and can be accessed from the Enzosystems LAN with a web-browser with the URL http://192.168.96.78:3002 .
 
-From this URL , a web form is served (designed and mostly implemented by Erik, please note that the checkboxes functionalities of this form are not fully implemented, but this point doesn't affect the file generation). This form is used to provide the values to encrypt and to use in order to generate the resulting enzovault file. 
+From this URL , a web form is served (designed and mostly implemented by Erik, please note that the checkboxes functionalities of this form are not fully implemented, but this point doesn't affect the file generation). This form is used to provide the values to encrypt and to use in order to generate the resulting enzovault file.
                     ________________________________________________
 
 The API provide the following functionalities (interacting with it via the form):
