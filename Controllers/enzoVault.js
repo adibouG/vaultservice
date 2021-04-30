@@ -57,7 +57,7 @@ const decryptFromEnzoVaultFile = (req , res) => {
 
     let { ikm , cipherText , masterKey } = req.body ;
 
-    if (!ikm ||  !cipherText ||  !masterKey )  return res.status(400).send(req.body)  ;
+    if (!ikm || !cipherText )  return res.status(400).send(req.body)  ;
 
     try {
         //create a new FileContext Object
@@ -74,10 +74,16 @@ const decryptFromEnzoVaultFile = (req , res) => {
     catch (e){
         winstonLogger.error('error' , 'encryptToEnzoVaultFile request error');
         winstonLogger.error('error' , JSON.stringify(e));
-        return res.status(505).send(e)  
+        return res.status(505).send(e)  ;
     }
 }
 
+const deleteFile = (name) => ( fs.rm(name , (err) => {
+       if (err) winstonLogger.log('error' , 'deleteFile ' + name + 'request error : ' + JSON.stringify(err));
+       winstonLogger.log('info' , 'deleteFile request success');
+       return ;
+    })
+)
 
 const downloadEnzoVaultFile = (req, res) => {
     
@@ -103,6 +109,12 @@ const downloadEnzoVaultFile = (req, res) => {
         winstonLogger.error('error' , 'downloadEnzoVaultFile request error');
         winstonLogger.error('error' , JSON.stringify(e));
         return res.status(500).send(err) ;
+    }
+    finally{
+        if (fs.existsSync(filePath)) {
+            winstonLogger.log('info' , 'downloadEnzoVaultFile success : delete file');
+            return deleteFile(filePath) ;
+        }
     }
 }
 
