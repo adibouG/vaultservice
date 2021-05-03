@@ -9,10 +9,15 @@ api.post('/encrypt' , encryptToEnzoVaultFile );
 api.post('/decrypt' , decryptFromEnzoVaultFile);
 
 //endpoint to download the file
-api.get('/file/:name' ,  downloadEnzoVaultFile) 
+api.get('/file/:name' ,  downloadEnzoVaultFile) ;
+
+//endpoint serving the rendered form (with url from env) 
+api.get('/', function (req, res) {
+    res.render('form', { host: process.env.HOST, port: process.env.PORT })
+});
 
 //endpoint serving the form
-api.get('/', (req, res) => res.sendFile('index.html'));
+//api.get('/', (req, res) => res.sendFile('index.html'));
   
 
 module.exports = api ; 

@@ -29,20 +29,20 @@ app.use(express.json()) ;// for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public')); //to serve the form located in public/index.html
 
-/*
-app.engine('ntl', function (filePath, options, callback) { // define the template engine and update the form submit to the correct host 
-  fs.readFile(filePath, function (err, content) {
+
+app.engine('ntl', (filePath, options, callback) => { // define a template engine to update the form submit to the correct host 
+  fs.readFile(filePath,  (err, content) => {
     if (err) return callback(err)
     // this is an extremely simple template engine
-    var rendered = content.toString()
-      .replace('#title#', '<title>' + options.title + '</title>')
-      .replace('#message#', '<h1>' + options.message + '</h1>')
+    let rendered = content.toString()
+      .replace('#host#', host)
+      .replace('#port#', port)
     return callback(null, rendered)
   })
 })
 app.set('views', './Views') // specify the views directory
 app.set('view engine', 'ntl') // register the template engine
-*/
+
 
 app.use(api);
 
