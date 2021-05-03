@@ -31,6 +31,14 @@ const encryptToEnzoVaultFile = (req , res) => {
         let fileName = `${chain}_${hotelId}.enzovault` ; 
         
         /***save the file in tmp folder to be read or downloaded  */
+
+        let tmpDir = path.join( process.cwd() ,  'tmp' ) ; 
+        if (!fs.existsSync(tmpDir)) {
+
+            winstonLogger.log('info' , 'tmp directory not found, creating new one');
+            fs.mkdirSync(tmpDir);
+        }
+        
         fs.writeFileSync( path.join( process.cwd() ,  'tmp' , fileName ) , JSON.stringify(file));
     
         winstonLogger.log('info' ,'encryptToEnzoVaultFile request success');

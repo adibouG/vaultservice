@@ -15,6 +15,15 @@ const host = process.env.HOST ;
 app.use(cors()) ;
 
 app.use(morgan('dev')) ;
+ 
+const myStream = {
+  write: (text) => {
+    winstonLogger.info(text)
+  }
+}
+
+app.use(morgan('combined', { stream: myStream }));
+// setup the logger
 
 app.use((req, res, next) => { 
     res.header("Access-Control-Allow-Origin", "*");
