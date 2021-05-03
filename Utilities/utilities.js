@@ -7,7 +7,7 @@ class FileContext {
         
         this.HOTELCHAIN = hotelChain ;
         this.HOTELID = hotelId ;
-        this.MASTERENZOKEY = masterKey || "MASTERENZOKEY";
+        this.MASTERENZOKEY = masterKey || process.env.MASTERKEY || "MASTERENZOKEY";
 
         //encryption
         this.encAlgorithm = 'aes-256-cbc';

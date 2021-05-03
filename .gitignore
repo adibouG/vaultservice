@@ -4,11 +4,6 @@
 *.enzovault
 
 
-# tmp
-
-tmp/*
-
-
 # Logs
 
 logs
