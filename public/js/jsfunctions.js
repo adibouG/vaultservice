@@ -35,6 +35,7 @@ function generateModule(){
     for (el of inputs) {
         let newString = el.id.replace(/\d+$/ , newId);
         el.id = newString;
+        el.value = "" ;
     }
 
     formContainerElmnt.insertBefore(newElmnt ,  formContainerElmnt.lastElementChild) 
