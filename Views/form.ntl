@@ -141,7 +141,7 @@
 
         <div class="propertyGroupContainer">
             <div class="propertyContainer">
-                <div class="propertyContainer__title">Security Key AES-192</div>
+                <div class="propertyContainer__title">Security Key AES-256</div>
                 <input id="masterKey" class="propertyContainer__inputMasterKey" type="search" lpignore=true>
             </div>
             <div class="lockContainer">
