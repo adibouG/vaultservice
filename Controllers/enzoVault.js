@@ -69,17 +69,17 @@ const decryptFromEnzoVaultFile = (req , res) => {
 
     try {
         //create a new FileContext Object
-        let fileContext = new FileContext() ; 
+        let fileContext = new FileContext(null , null , masterKey , ikm) ; 
         //set the FileContext ikm
-        fileContext.ikm = ikm ;
+        if (fileContext.ikm !== ikm)  fileContext.ikm = ikm ;
+        if (fileContext.masterKey !== masterKey) fileContext.masterKey = masterKey  ;
         //decrypt
         let decryptedText = fileContext.decrypt(cipherText)  ;
 
         winstonLogger.log('info' ,'decryptFromEnzoVaultFile request success');
        
         return res.send(decryptedText) ;
-    }
-    catch (e){
+    } catch (e){
         winstonLogger.error('error' , 'encryptToEnzoVaultFile request error');
         winstonLogger.error('error' , JSON.stringify(e));
         return res.status(505).send(e)  ;
