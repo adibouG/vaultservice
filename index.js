@@ -11,6 +11,7 @@ const api = require('./Routes/routes.js');
 
 const port =  process.env.PORT ;
 const host = process.env.HOST ;
+const scheme = process.env.SCHEME ;
 
 app.use(cors()) ;
 
@@ -44,11 +45,13 @@ app.engine('ntl', (filePath, options, callback) => { // define a template engine
     if (err) return callback(err)
     // this is an extremely simple template engine
     let rendered = content.toString()
-      .replace('#host#', host)
-      .replace('#port#', port)
+                    .replace('#scheme#', scheme)
+                    .replace('#host#', host)
+                    .replace('#port#', port)
     return callback(null, rendered)
   })
 })
+
 app.set('views', './Views') // specify the views directory
 app.set('view engine', 'ntl') // register the template engine
 
@@ -58,6 +61,6 @@ app.use(api);
 //start the app server on defined port 
 app.listen(port , () => {
 
-    console.log('app is running at %s and listening on port %s' , host , port);
+    console.log('enzovault app is running at %s://%s:%s' ,scheme, host , port);
 
 });

@@ -1,4 +1,4 @@
-const  { hkdfSync , createCipheriv , createDecipheriv }  = require('crypto');
+const  { hkdfSync , createCipheriv , createDecipheriv , randomBytes}  = require('crypto');
 
 
 class FileContext { 
@@ -7,7 +7,7 @@ class FileContext {
         
         this.HOTELCHAIN = hotelChain ;
         this.HOTELID = hotelId ;
-        this.MASTERENZOKEY = masterKey || process.env.MASTERKEY || "MASTERENZOKEY";
+        this.MASTERENZOKEY = masterKey || process.env.MASTERKEY ;
 
         //encryption
         this.encAlgorithm = 'aes-256-cbc';
@@ -16,7 +16,16 @@ class FileContext {
         // iv is 16 null bytes
         this.iv = Buffer.alloc(16, 0);
 
-        this.ikm = String(this.HOTELCHAIN).concat(this.HOTELID) ;
+        this.ikm = (() => {
+            try {
+                const buf = randomBytes(32); 
+                return buf.toString('hex');
+            } catch (e) {
+                console.log(e);
+                let part1 = Buffer.from(String(this.HOTELCHAIN).concat(this.HOTELID));
+                return part1.toString('hex');
+            }
+        })();
         
         this.derivedKey = this.calculateDerivedEncKey(this.ikm , this.MASTERENZOKEY) ;
         

@@ -12,8 +12,6 @@
   
  function mySubmitFunc(e)
  {
-
-
      //e.preventDefault();
      let version = 1.0 ;
      let chain; 
@@ -36,7 +34,7 @@
      key = document.getElementById("masterKey");
      if (key && key.value) 
      {
-         hotelId = key.value;
+         masterKey = key.value;
      }
 
     let numOfElmnts = document.getElementsByClassName("propertyGroupContainer").length
@@ -94,15 +92,15 @@
      let formData = { masterKey, chain, hotelId, data : moduleArray }
  
      const headers = new Headers();
-
      headers.append('Content-Type' , 'application/json') ;
+
      const options = {
          method: 'POST', 
          headers: headers , 
          body : JSON.stringify(formData) 
      };
 
-     let  hostUrl = 'http://#host#:#port#' ;
+     let  hostUrl = '#scheme#://#host#:#port#' ;
 
      console.log(hostUrl)
      fetch(`${hostUrl}/encrypt` , options)
@@ -126,10 +124,27 @@
          a.click();
          return;
      })
-     .catch(err => console.log(err))
+     .catch(err => { 
+         console.log(err);
+         alert(JSON.stringify(err));
+     })
  
  }
 
+ function lockMasterKeyFunc()
+ {
+     let checkBox = document.getElementById("masterKey");
+     let inputControl = document.getElementById("idInputMasterKey");
+     let button = document.getElementById("idButtonGenerateKey");
+     
+     if (checkBox.checked == true){
+         inputControl.disabled = true;
+         button.disabled = true;
+     } else {
+         inputControl.disabled = false;
+         button.disabled = false;
+     }
+ }
 
 
 
@@ -187,62 +202,6 @@
             <div class="propertyContainer">
                 <div class="propertyContainer__title">Crypto Key (optional, if username + password is not used)</div>
                 <input id="cryptoKey1" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-            </div>
-        </div>
-
-        <div id="moduleGroup2" class="propertyGroupContainer">
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Module Name</div>
-                <input id="module2" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Credential Set</div>
-                <input id="credentialSet2" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Url(s) (optional)</div>
-                <input id="urlA2" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-                <input id="urlB2" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Username (optional)</div>
-                <input id="username2" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Password (optional)</div>
-                <input id="password2" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Crypto Key (optional, if username + password is not used)</div>
-                <input id="cryptoKey2" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-            </div>
-        </div>
-
-        <div id="moduleGroup3" class="propertyGroupContainer">
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Module Name</div>
-                <input id="module3" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Credential Set</div>
-                <input id="credentialSet3" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Url(s) (optional)</div>
-                <input id="urlA3" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-                <input id="urlB3" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Username (optional)</div>
-                <input id="username3" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Password (optional)</div>
-                <input id="password3" class="propertyContainer__input" type="search" lpignore=true>
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">Crypto Key (optional, if username + password is not used)</div>
-                <input id="cryptoKey3" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
             </div>
         </div>
 

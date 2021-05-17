@@ -108,7 +108,7 @@ body {
   position: relative;
   /* height: 65px; */
   margin: 20px;
-  width: 600px;
+  /*width: 600px;*/
   margin-left: auto;
   margin-right: auto;
       
@@ -145,6 +145,7 @@ body {
 .propertyContainer
 {
   position: relative;
+  display: inline-grid;
   /* top: 0px;
   bottom: 0px; */
   /* width: 175px; */
