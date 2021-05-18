@@ -60,7 +60,7 @@ const encryptToEnzoVaultFile = (req , res) => {
 const decryptFromEnzoVaultFile = (req , res) => { 
 
 
-    winstonLogger.log('info' ,'decryptFromEnzoVaultFile request');
+    winstonLogger.log('' ,'decryptFromEnzoVaultFile request');
     winstonLogger.log('info' ,'request ' + JSON.stringify(req.body));
 
     let { ikm , cipherText , masterKey } = req.body ;
@@ -69,8 +69,11 @@ const decryptFromEnzoVaultFile = (req , res) => {
 
     try {
         //create a new FileContext Object
+        console.log('+++++++++++++++++++') ;
+        
         let fileContext = new FileContext(null , null , masterKey , ikm) ; 
         //set the FileContext ikm
+        console.log('+++++++++++++++++++20000') ;
         if (fileContext.ikm !== ikm)  fileContext.ikm = ikm ;
         if (fileContext.masterKey !== masterKey) fileContext.masterKey = masterKey  ;
         //decrypt
