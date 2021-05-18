@@ -12,7 +12,7 @@ The API provide the following functionalities (interacting with it via the form)
 
 - _**POST /encrypt :**_
 
-**expects ->** _a POST request, with a body containing the hotelChain , hotelID , enzoMasterKey and the data to be encrypted._
+**expects ->** _a POST request, with a body containing the hotelChain , hotelID , masterKey and the data to be encrypted._
 
 **returns ->** _a json object containing the generated fileName and the generated file content._
                     ________________________________________________
@@ -22,7 +22,7 @@ The API provide the following functionalities (interacting with it via the form)
 `Note : This functionality implementation wasn't discuss nor described , also that the approach for now as it was the quicker to implement. But according to the needs, and the use cases , maybe another approach should be implemented uploading directly the enzovault file or it's content instead of extracting the "key values" from the file.`
 
 **expects ->** 
-_a POST request, with a body containing the following values taken from an enzovault file, the ikm and the related encrypted data (cipherText)._
+_a POST request, with a body containing the following values taken from an enzovault file, with : ikm , cipherText ( the related encrypted data eg cipherText) and masterKey . ;
 
 **returns ->** _a json structure (array of json object) as the encrypted data contained within the enzovault file (e.g. cipherText)._
                     ________________________________________________
