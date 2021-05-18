@@ -21,7 +21,14 @@ class FileContext {
         
     }
 
-    
+
+    //to print as hex the Uint8Array buffer
+    buf2hex(buffer) { 
+        return [...new Uint8Array(buffer)].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+      
+     
+
 
 //hkdf using the master Enzo key as the salt and Using input key material from the binary file as variable argument to the function 
     calculateDerivedEncKey(ikm = null , masterKey = null) {
@@ -29,18 +36,15 @@ class FileContext {
         
         ikm = ikm || this.ikm ;
         masterKey = masterKey || this.MASTERENZOKEY ;
-        console.log("masterKey :");
-        console.log(masterKey);
-        console.log("ikm :");
-        console.log(ikm);
-        if (!ikm || !masterKey) return null ;
+       
+        if (!ikm || !masterKey)  throw new Error('no derivedkey available') ;
         
-        let derivedKey = hkdfSync(this.hmacAlgorithm , ikm , masterKey , '', 32);
+        let derivedKey = hkdfSync(this.hmacAlgorithm , masterKey , '' , ikm, 32);
 
         this.derivedKey = derivedKey ;
-
-        console.log("derivedKey : ");
         console.log(derivedKey);
+        console.log("calculateDerivedEncKey buf2hex(derivedKey) : ");
+        console.log(this.buf2hex(derivedKey));
 
         return derivedKey ;
     }
@@ -53,7 +57,7 @@ class FileContext {
         let cipher = createCipheriv(this.encAlgorithm , Buffer.from(derivedKey), this.iv);
         cipher.setAutoPadding(true) ;
         let encrypted = cipher.update(text);
-       
+            
         encrypted = Buffer.concat([encrypted, cipher.final()]);
 
         return encrypted.toString('hex') ;
@@ -67,13 +71,13 @@ class FileContext {
         ikm = ikm || this.ikm ;
         masterKey = masterKey || this.MASTERENZOKEY ;
 
-        if (!this.derivedKey && (!ikm || !masterKey)) throw Error('no derivedkey') ;
+        if (!this.derivedKey && (!ikm || !masterKey)) throw new Error('no derivedkey available') ;
 
         let derivedKey = this.derivedKey || this.calculateDerivedEncKey(ikm , masterKey) ;
 
         let encryptedText = Buffer.from(text, 'hex');
-        console.log("decrypt - derivedKey :")
-        console.log(derivedKey)
+   
+
         let decipher = createDecipheriv(this.encAlgorithm, Buffer.from(derivedKey), this.iv);
         decipher.setAutoPadding(true) ;
 
