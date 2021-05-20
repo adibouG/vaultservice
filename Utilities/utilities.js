@@ -24,8 +24,8 @@ class FileContext {
         
     genIkm(){
         let v = randomBytes(32) ;
-     
-        return v; 
+
+        return v.toString('hex'); 
     }
     
     genNullIv(){
@@ -56,7 +56,7 @@ class FileContext {
         */
        
         let masterKeyBuf =  Buffer.from(masterKey, 'hex');
-        let ikmBuf =  Buffer.from(ikm, 'hex');
+        let ikmBuf =  Buffer.from(ikm , 'hex');
 
         console.log("ikmBuf");
         console.log(ikmBuf);
@@ -69,7 +69,7 @@ class FileContext {
         console.log("derivedKey");
         console.log(derivedKey);
      
-        this.derivedKey = derivedKey ;
+        this.derivedKey = derivedKey
 
         return derivedKey ;
     }
