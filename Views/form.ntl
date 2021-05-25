@@ -237,7 +237,7 @@ function editFile(){
 
  function lockMasterKeyFunc()
  {
-     let checkBox = document.getElementById("masterKey");
+     let checkBox = document.getElementById("idLockMasterKey");
      let inputControl = document.getElementById("masterKey");
   
      
