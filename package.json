@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Adrien Gonzalez",
+  "author": "Adrien Gonzalez Oliva for Enzosystems",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

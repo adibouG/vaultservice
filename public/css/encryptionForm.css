@@ -58,7 +58,7 @@ body {
   overflow-x: auto;
   overflow-y: scroll;
 
-  
+  background-color : rgb(94 104 108 / 16%);
   
   /* background-color: var(--greyGreen);  */
 }
@@ -128,7 +128,7 @@ body {
   position: relative;
   height: 65px;
   margin: 20px;
-  width: 600px;
+  /*width: 600px;*/
   margin-left: auto;
   margin-right: auto;
       
@@ -139,7 +139,7 @@ body {
   /* border: solid 1px var(--greyGreen); */
   border-radius: 4px;
   /* padding: 10px; */
-  background-color: var(--white);
+  /* background-color: var(--white); */
 }
 
 .propertyContainer
@@ -308,15 +308,14 @@ body {
 }  
 
 .label {
-  margin-left: 5px;
-  
+  margin-left: 25px;
+  position: relative;
+  bottom: 15px;
   font-size: 12px;
   font-weight: bold;
   overflow-x: hidden;
   white-space: nowrap;
-
-  
-  color:var(--greyGreen); 
+  color: var(--greyGreen);
 }
 
 .edit {
@@ -328,4 +327,30 @@ body {
  justify-content: center;
   cursor: pointer;
 
+}
+
+
+.cross {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+}
+
+.cross_1 {
+  height: 20px;
+  width: 2px;
+  margin-left: 10px;
+  background-color: #4b0000;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.cross_2 {
+  height: 20px;
+  width: 2px;
+  background-color: #4b0000;
+  transform: rotate(90deg);
+  z-index: 1;
 }

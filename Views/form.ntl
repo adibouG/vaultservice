@@ -248,13 +248,21 @@ function editFile(){
      }
  }
 
+function deleteModule(e) {
+   if (e.target.closest('.cross'))  {
+    let module = e.target.closest('.cross').parentNode;
+    console.log(module)
+    let form = module.parentNode;
+    if (form.children.length > 4) form.removeChild(module) ;
+   }
 
+}
 
     </script>
 </head>
 <body>
     <div class="title">Encryption Tool</div> 
-    <div class="formContainer">
+    <div id="form" class="formContainer">
 
         <div class="propertyGroupContainer">
             <div class="propertyContainer">
@@ -305,6 +313,12 @@ function editFile(){
                 <div class="propertyContainer__title">Crypto Key (optional, if username + password is not used)</div>
                 <input id="cryptoKey1" class="propertyContainer__inputCryptoKey" type="search" lpignore=true>
             </div>
+        
+<div class="cross"">
+  <div class="cross_1">
+    <div class="cross_2"></div>
+  </div>
+</div>
         </div>
 
        
@@ -313,20 +327,21 @@ function editFile(){
                 <label class="btn edit" for="edit" id="editFileBtn">EDIT</label>
                 <input  type="file" name="edit" id="edit" class="hidden" onClick="editFile()" hidden/> 
             </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title">After encryption:</div>
-                <input class="propertyContainer__checkbox" type="checkbox" lpignore=true><label class="label">Clear inputs</label><br>
-                
-            </div>
-            <div class="propertyContainer">
-                <div class="propertyContainer__title"></div>
-                <!-- <input class="propertyContainer__input"> -->
-            </div>
+  
+         
             <div class="propertyContainer">
                 <input type="button" class="btn" value="Encrypt" onClick="mySubmitFunc()">
             </div>
+
               <div class="propertyContainer">
                 <button id="addNodeButton" class="btn" >ADD MODULE</button>
+            </div>
+
+            <div class="propertyContainer">
+                <div class="propertyContainer__title">After encryption:</div>
+                <input class="propertyContainer__checkbox" type="checkbox" lpignore=true>
+                <label class="label clear">Clear inputs</label>
+                
             </div>
         </div>
     </div>
