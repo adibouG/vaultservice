@@ -1,13 +1,10 @@
-
 const morgan  = require('morgan');
 const winston = require('winston');
 const path = require('path');
 
 const { splat, combine, timestamp, printf } = winston.format;
 
-
-const myFormat = printf(({ timestamp , level, message }) => (level, `${timestamp}::${level}::${message}`));
-
+const myFormat = printf(({ timestamp, level, message }) => (level, `${timestamp}::${level}::${message}`));
 
 const winstonLogger = winston.createLogger({
 
@@ -24,8 +21,6 @@ const winstonLogger = winston.createLogger({
     ]
   });
 
-
-  
   module.exports = {
         morgan,
         winstonLogger
