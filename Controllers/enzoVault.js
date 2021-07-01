@@ -1,23 +1,15 @@
-
-
 const fs = require('fs');
 const path = require('path');
-
-
-const {morgan , winstonLogger} = require('../Logger/loggers.js');
-
+const {winstonLogger} = require('../Logger/loggers.js');
 const FileContext = require('../Utilities/utilities.js');
 
-
-
-const encryptToEnzoVaultFile = (req , res) => {
+const encryptToEnzoVaultFile = (req, res) => {
 
     winstonLogger.log('info' ,'encryptToEnzoVaultFile request');
-    winstonLogger.log('info' ,'request ' + JSON.stringify(req.body));
 
-    let {chain , hotelId , data , masterKey } = req.body ;
+    let {chain, hotelId, data, masterKey } = req.body ;
 
-    if (!chain ||  !hotelId ||  !data )  return res.status(400).send(req.body)  ;
+    if (!chain || !hotelId || !data )  return res.status(400).send(req.body)  ;
     
     try {
         //create a new filecontext object that generate the key and other params to encrypt the text 
@@ -29,18 +21,16 @@ const encryptToEnzoVaultFile = (req , res) => {
         //format the expected output (enzovault json) file
         let file = fileContext.makeEnzoVaultJson(encryptedText);
         let fileName = `${chain}_${hotelId}.enzovault` ; 
-        
         /***save the file in tmp folder to be read or downloaded  */
-
         let tmpDir = path.join( process.cwd() ,  'tmp' ) ; 
         if (!fs.existsSync(tmpDir)) {
 
             winstonLogger.log('info' , 'tmp directory not found, creating new one');
+
             fs.mkdirSync(tmpDir);
         }
-        
         fs.writeFileSync( path.join( process.cwd() ,  'tmp' , fileName ) , JSON.stringify(file));
-    
+        
         winstonLogger.log('info' ,'encryptToEnzoVaultFile request success');
         winstonLogger.log('info' , 'fileName ' + fileName);
 
@@ -52,43 +42,38 @@ const encryptToEnzoVaultFile = (req , res) => {
         winstonLogger.error( JSON.stringify(e));
         return res.status(500).send(e) ; 
     }
-
 }
 
 
-
-const decryptFromEnzoVaultFile = (req , res) => { 
-
+const decryptFromEnzoVaultFile = (req, res) => { 
 
     winstonLogger.log('' ,'decryptFromEnzoVaultFile request');
     winstonLogger.log('info' ,'request ' + JSON.stringify(req.body));
 
-    let { ikm , cipherText , masterKey } = req.body ;
-
+    let { ikm, cipherText, masterKey } = req.body ;
     if (!ikm || !cipherText )  return res.status(400).send(req.body)  ;
 
     try {
         //create a new FileContext Object
-      
         let fileContext = new FileContext(null , null , masterKey , ikm) ; 
-   
         if (fileContext.ikm !== ikm)  fileContext.ikm = ikm ;
         if (fileContext.masterKey !== masterKey) fileContext.masterKey = masterKey  ;
-
         let decryptedText = fileContext.decrypt(cipherText)  ;
 
         winstonLogger.log('info' ,'decryptFromEnzoVaultFile request success');
-        console.log(decryptedText)
+
         return res.send(decryptedText) ;
     } catch (e){
+        
         winstonLogger.error('error' , 'encryptToEnzoVaultFile request error');
         winstonLogger.error('error' , JSON.stringify(e));
+        
         return res.status(505).send(e)  ;
     }
 }
 
-const deleteFile = (name) => ( fs.rm(name , (err) => {
-       if (err) winstonLogger.log('error' , 'deleteFile ' + name + 'request error : ' + JSON.stringify(err));
+const deleteFile = (name) => ( fs.rm(name, (err) => {
+       if (err) winstonLogger.log('error', 'deleteFile ' + name + 'request error : ' + JSON.stringify(err));
        winstonLogger.log('info' , 'deleteFile request success');
        return ;
     })
