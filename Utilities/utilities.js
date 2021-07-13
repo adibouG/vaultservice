@@ -1,7 +1,6 @@
-const  { hkdfSync , createCipheriv , createDecipheriv , randomBytes}  = require('crypto');
+const  { hkdfSync, createCipheriv, createDecipheriv, randomBytes }  = require('crypto');
 class FileContext { 
-    constructor(hotelChain = null , hotelId = null , masterKey = null , ikm = null ){
-        
+    constructor(hotelChain = null, hotelId = null, masterKey = null, ikm = null ){
         this.HOTELCHAIN = hotelChain ;
         this.HOTELID = hotelId ;
         this.MASTERENZOKEY = masterKey  ;
@@ -26,43 +25,28 @@ class FileContext {
 
     //hkdf using the master Enzo key as the salt and Using input key material from the binary file as variable argument to the function 
     calculateDerivedEncKey(ikm = null, masterKey = null) {
-        
         ikm = ikm || this.ikm ;
         masterKey = masterKey || this.MASTERENZOKEY ;
-       
         if (!ikm || !masterKey)  throw new Error('no derivedkey available') ;
-
         let masterKeyBuf =  Buffer.from(masterKey, 'hex');
-        let ikmBuf =  Buffer.from(ikm , 'hex');
-        let derivedKey = hkdfSync(this.hmacAlgorithm, masterKeyBuf , '' , ikmBuf , 32);
-        this.derivedKey = derivedKey
-
+        let ikmBuf =  Buffer.from(ikm, 'hex');
+        let derivedKey = hkdfSync(this.hmacAlgorithm, masterKeyBuf, '', ikmBuf, 32);
+        this.derivedKey = derivedKey;
         return derivedKey ;
     }
 
     encrypt(text, dk = null) {
-     
         let derivedKey = dk || this.derivedKey || this.calculateDerivedEncKey() ;
-        let cipher = createCipheriv(this.encAlgorithm , Buffer.from(derivedKey), this.iv);
-        
+        let cipher = createCipheriv(this.encAlgorithm, Buffer.from(derivedKey), this.iv);
         cipher.setAutoPadding(true) ;
-        
         let encrypted = cipher.update(text);
-            
         encrypted = Buffer.concat([encrypted, cipher.final()]);
-        
         return encrypted.toString('hex') ;
     }
-    
-    decrypt(text,  ikm = null, masterKey = null) {
-        
+    decrypt(text, ikm = null, masterKey = null) {
         ikm = ikm || this.ikm ;
         masterKey = masterKey || this.MASTERENZOKEY ;
-        
         if (!this.derivedKey && (!ikm || !masterKey)) throw new Error('no derivedkey available') ;
-        
-        console.log(this.derivedKey) ;
-
         let derivedKey = this.derivedKey || this.calculateDerivedEncKey(ikm , masterKey) ;
 
         let encryptedText = Buffer.from(text, 'hex');
@@ -82,10 +66,8 @@ class FileContext {
             throw e;
         }
     }
-
     
     makeEnzoVaultJson(cipherText){ 
-
         return ({
             "fileType": "enzovault",
             "version": 1,
@@ -93,15 +75,10 @@ class FileContext {
             "cipherText": cipherText
         });
     }
-
-    
-    makeDecryptedEnzoVault(cipherText , ikm = null , masterKey = null){ 
-
+    makeDecryptedEnzoVault(cipherText, ikm = null, masterKey = null){ 
         ikm = ikm || this.ikm ;
         masterKey = masterKey || this.MASTERENZOKEY ;
-
-        let text = decrypt(cipherText , ikm , masterKey)
-
+        let text = decrypt(cipherText, ikm, masterKey)
         return ({
             "fileType": "decryptedEnzovault",
             "version": 1,
