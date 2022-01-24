@@ -44,6 +44,6 @@ app.set('views', './Views') // specify the views directory
 app.set('view engine', 'ntl') // register the template engine
 app.use(api);
 //start the app server on defined port 
-app.listen(port, () => {
+app.listen(port, host, () => {
     console.log('enzovault app is running at %s://%s:%s', scheme, host, port);
 });

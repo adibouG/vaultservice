@@ -48,19 +48,13 @@ class FileContext {
         masterKey = masterKey || this.MASTERENZOKEY ;
         if (!this.derivedKey && (!ikm || !masterKey)) throw new Error('no derivedkey available') ;
         let derivedKey = this.derivedKey || this.calculateDerivedEncKey(ikm , masterKey) ;
-
         let encryptedText = Buffer.from(text, 'hex');
-   
-        console.log("masterKeyBuf");
         let decipher = createDecipheriv(this.encAlgorithm, Buffer.from(derivedKey), this.iv);
         decipher.setAutoPadding(true) ;
         try {
             let decrypted = decipher.update(encryptedText);
             decrypted = Buffer.concat([decrypted, decipher.final()]);
-            console.log("decrypted");
-            console.log(decrypted);
             return decrypted.toString();
-            //return decrypted.toString('utf8');
         }catch (e) {
             console.log(e) ;
             throw e;
