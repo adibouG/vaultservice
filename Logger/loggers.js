@@ -1,7 +1,6 @@
 const morgan  = require('morgan');
 const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
-const path = require('path');
 
 const { splat, combine, timestamp, printf } = winston.format;
 const myFormat = printf(({ timestamp, level, message }) => (level, `${timestamp}::${level}::${message}`));
