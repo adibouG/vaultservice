@@ -12,13 +12,11 @@ const scheme = process.env.SCHEME ;
 
 app.use(cors()) ;
 app.use(morgan('dev')) ;
- 
 const myStream = {
   write: (text) => {
     winstonLogger.info(text)
   }
-}
-
+};
 app.use(morgan('combined', { stream: myStream }));
 // setup the logger
 app.use((req, res, next) => { 
@@ -28,11 +26,9 @@ app.use((req, res, next) => {
     req.setTimeout(0); 
     next();
   });
-   
 app.use(express.json()) ;// for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public')); //to serve the form located in public/index.html
-
 app.engine('ntl', (filePath, options, callback) => { // define a template engine to update the form submit to the correct host 
   fs.readFile(filePath,  (err, content) => {
     if (err) return callback(err)
@@ -43,13 +39,11 @@ app.engine('ntl', (filePath, options, callback) => { // define a template engine
                     .replace('#port#', port)
     return callback(null, rendered)
   })
-})
-
+});
 app.set('views', './Views') // specify the views directory
 app.set('view engine', 'ntl') // register the template engine
-
 app.use(api);
 //start the app server on defined port 
-app.listen(port , () => {
-    console.log('enzovault app is running at %s://%s:%s' ,scheme, host , port);
+app.listen(port, host, () => {
+    console.log('enzovault app is running at %s://%s:%s', scheme, host, port);
 });
