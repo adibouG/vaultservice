@@ -11,7 +11,7 @@ const encryptToEnzoVaultFile = (req, res) => {
         //create a new filecontext object that generate the key and other params to encrypt the text 
         let fileContext = new FileContext(chain, hotelId,  masterKey) ;
         //convert the json data to a string 
-        let stringToEncrypt = JSON.stringify(data) ;
+        let stringToEncrypt = JSON.stringify({ chain, hotelId, ...data }) ;
         //encrypt
         let encryptedText = fileContext.encrypt(stringToEncrypt) ; 
         //format the expected output (enzovault json) file
