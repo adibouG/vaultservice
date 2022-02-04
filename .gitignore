@@ -2,7 +2,7 @@
 #enzovaultfiles
 
 *.enzovault
-
+*audit.json
 .env
 # Logs
 
