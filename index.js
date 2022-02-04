@@ -3,7 +3,7 @@ const express = require('express');
 const fs = require('fs') // this engine requires the fs module
 const app = express();
 const cors = require('cors');
-const {morgan , winstonLogger} = require('./Logger/loggers.js');
+const {morgan, winstonLogger} = require('./Logger/loggers.js');
 const api = require('./Routes/routes.js');
 
 const port =  process.env.PORT ;
@@ -37,7 +37,7 @@ app.engine('ntl', (filePath, options, callback) => { // define a template engine
                     .replace('#scheme#', scheme)
                     .replace('#host#', host)
                     .replace('#port#', port)
-    return callback(null, rendered)
+    return callback(null, rendered);
   })
 });
 app.set('views', './Views') // specify the views directory
