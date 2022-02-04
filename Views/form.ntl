@@ -17,11 +17,11 @@ function fillForm(modulesData) {
       delete modulesData.chain;
       let hotelId = modulesData.hotelId;
       delete modulesData.hotelId;
-        let modules = modulesData;
+      let modules = modulesData;
            document.getElementById("chain").value = chain;
            document.getElementById("hotelId").value = hotelId;
       console.log(modules)
-    for (let i = 0 ; i < Object.keys(modules).length ; i++) 
+    for (let i = 0; i < Object.keys(modules).length; i++) 
     {
         //get form module or create one in the ui
         let moduleIdx = i + 1 ;
