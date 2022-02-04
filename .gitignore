@@ -3,7 +3,7 @@
 
 *.enzovault
 
-*.env
+.env
 # Logs
 
 logs

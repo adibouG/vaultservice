@@ -1,3 +1,4 @@
+require('dotenv').config();
 const api = require('express').Router();
 const { encryptToEnzoVaultFile, decryptFromEnzoVaultFile, downloadEnzoVaultFile } = require('../Controllers/enzoVault.js');
 
@@ -8,7 +9,7 @@ api.post('/decrypt', decryptFromEnzoVaultFile);
 api.get('/file/:name',  downloadEnzoVaultFile) ;
 //endpoint serving the rendered form (with url from env) 
 api.get('/', function (req, res) {
-    res.render('form', { host: process.env.HOST, port: process.env.PORT });
+    res.render('form', { scheme: process.env.SCHEME , host: process.env.HOST, port: process.env.PORT });
 });
 
 module.exports = api ; 

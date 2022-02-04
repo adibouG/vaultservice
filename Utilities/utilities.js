@@ -1,4 +1,5 @@
-const  { hkdfSync, createCipheriv, createDecipheriv, randomBytes }  = require('crypto');
+const  { hkdfSync, createCipheriv, createDecipheriv, randomBytes } = require('crypto');
+const {winstonLogger} = require('../Logger/loggers.js');
 class FileContext { 
     constructor(hotelChain = null, hotelId = null, masterKey = null, ikm = null ){
         this.HOTELCHAIN = hotelChain ;
