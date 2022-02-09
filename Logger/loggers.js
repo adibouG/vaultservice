@@ -15,8 +15,8 @@ const winstonLogger = winston.createLogger({
         transports: [
           new DailyRotateFile({
             filename: `EnzoVault-${process.env.HOST}-%DATE%.log`,
-            dirname:  `${process.cwd()}/LogFiles`,
-            level: process.env.LOGGER_LEVEL ? process.env.LOGGER_LEVEL : 'raw' ,
+            dirname:  process.env.LOG_DIR || `${process.cwd()}/LogFiles`,
+            level: process.env.LOGGER_LEVEL || 'raw' ,
             handleExceptions: true,
             colorize: true,
             json: false,

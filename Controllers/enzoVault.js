@@ -66,7 +66,7 @@ const downloadEnzoVaultFile = (req, res) => {
     let fileName = req.params.name ;
     winstonLogger.log('info','downloadEnzoVaultFile request ' + fileName);
     if (!fileName) return res.status(400).end() ;
-    let filePath = path.join( process.cwd(), 'tmp', fileName )  ;
+    let filePath = path.join(process.cwd(), 'tmp', fileName )  ;
     try {
         if (fs.existsSync(filePath)) {
             winstonLogger.log('info', 'downloadEnzoVaultFile request success');
