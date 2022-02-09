@@ -6,8 +6,8 @@ class FileContext {
         this.HOTELID = hotelId ;
         this.MASTERENZOKEY = masterKey  ;
         //encryption
-        this.encAlgorithm = 'aes-256-cbc';
-        this.hmacAlgorithm = 'sha3-256' ;
+        this.encAlgorithm = process.env.ENCODING_ALGORITHM || 'aes-256-cbc';
+        this.hmacAlgorithm = process.env.HMAC_ALGORITHM ||'sha3-256' ;
         // iv is 16 null bytes
         this.iv = this.genNullIv() ; 
         this.ikm = ikm || this.genIkm() ;
