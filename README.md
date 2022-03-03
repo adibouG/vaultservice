@@ -41,7 +41,7 @@ Health endpoint to confirm the service is up
 Many adjustements and improvements still have to be done , also feel free to provide your feedbacks, suggestions, reviews , or whatever tha could be usefull.
 
 - _**If the service is down or not reachable: **_
-Most probably the VM running it on 192.168.96.78 is not started. Once the VM is started either you can run the service docker image from any directory or move to Project_test/Enzovault_server/git/enzovault and run : either "npm run start",  or "node index.js &"    
+Most probably the VM running it on 192.168.96.78 is not started. Once the VM is started either you can run the service docker image from any directory or move to Project_test/Enzovault_server/git/enzovault and run : either "npm run start",  "npm run dev" or "node index.js &"    
 
 Thanks.
 
