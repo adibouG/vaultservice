@@ -67,7 +67,7 @@ function submitToDecryptEndpoint(masterKey , values) {
      };
 
      console.log(hostUrl)
-     fetch(`${hostUrl}/decrypt` , options)
+     fetch(`${hostUrl}/api/decrypt` , options)
         .then(res => {
            console.log(res)
            return res.json();
@@ -208,7 +208,7 @@ function editFile(){
 
      
      console.log(hostUrl)
-     fetch(`${hostUrl}/encrypt` , options)
+     fetch(`${hostUrl}/api/encrypt` , options)
         .then(res => {
 
             version = res.headers.has('version')? res.headers.get('version') : version ;
@@ -222,7 +222,7 @@ function editFile(){
          //let objectURL = window.URL.createObjectURL(blob);
          /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
         
-            a.href = `${hostUrl}/file/` + body.fileName ;
+            a.href = `${hostUrl}/api/file/` + body.fileName ;
      
             //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
             a.download = body.fileName  ;
