@@ -1,0 +1,7 @@
+NODE_ENV=dev
+PORT=<port number>
+HOST=<ip>
+SCHEME=<http>
+ENCODING_ALGORITHM=aes-256-cbc
+HMAC_ALGORITHM=sha3-256
+LOGGER_LEVEL=<error|debug|info|raw
