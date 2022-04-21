@@ -12,10 +12,22 @@
 let hostUrl = '#scheme#://#host#:#port#' ;
 
 function fillForm(modules) {
-      
+    if (!Array.isArray(modules)) {
+            let key = document.getElementById("chain");
+            key.value =  modules.chain;
+            delete modules.chain;
+            key = document.getElementById("hotelId");
+            key.value = modules.hotelId;
+            delete modules.hotelId;
+            console.log(modules)
+            let tempmodule = [];
+            for (let i of Object.values(modules)){ tempmodule.push(i); }
+            modules = tempmodule;
+            
+    }
 
-    for (let i = 0 ; i < modules.length ; i++) 
-    {
+    
+    for (let i = 0 ; i < modules.length ; i++) {
         //get form module or create one in the ui
         let moduleIdx = i + 1 ;
         let moduleGroupId  = `moduleGroup${moduleIdx}` ;
@@ -33,7 +45,7 @@ function fillForm(modules) {
         for (const [keyName, keyValue] of Object.entries(module))
         {
             console.log( keyName + ', ' + keyValue)
-             console.log( keyName + moduleIdx )
+            console.log( keyName + moduleIdx )
             if (keyName !== "urls") { 
                 document.getElementById(keyName + moduleIdx).value = keyValue ;
             }
@@ -52,14 +64,11 @@ function fillForm(modules) {
 
 
 
-function submitToDecryptEndpoint(masterKey , values) {
+function submitToDecryptEndpoint(masterKey, values) {
 
     let formData = { masterKey, ...values }
- 
     const headers = new Headers();
-
-    headers.append('Content-Type' , 'application/json') ;
-
+    headers.append('Content-Type', 'application/json') ;
     const options = {
          method: 'POST', 
          headers: headers , 
@@ -74,7 +83,7 @@ function submitToDecryptEndpoint(masterKey , values) {
          })
         .then(modules => {
                console.log(modules)
-         // fill the form with the returned values 
+            //fill the form with the returned values 
                return fillForm(modules);
         })
         .catch(err => console.log(err))
@@ -83,7 +92,7 @@ function submitToDecryptEndpoint(masterKey , values) {
 
 function editFile(){
 
-    let fileContent  , parsedValues ;
+    let fileContent, parsedValues ;
 
     let inputs = document.getElementById('edit');
     let actualBtn = document.getElementById('editFileBtn');
@@ -94,7 +103,7 @@ function editFile(){
     function handleFiles(){
         const file = this.files[0]; 
         
-       // if (masterKey) actualBtn.textContent =  file.name ;
+       // if (masterKey) actualBtn.textContent = file.name ;
 
         //read the file
         const reader = new FileReader() ;
@@ -104,15 +113,12 @@ function editFile(){
             fileContent = e.target.result;
             console.log(fileContent);
             parsedValues = JSON.parse(fileContent) ;
-            
-            return submitToDecryptEndpoint(masterKey , parsedValues) ;
+            return submitToDecryptEndpoint(masterKey, parsedValues) ;
         });
 
         reader.readAsText(file);
     }
-        
-    inputs.addEventListener('change', handleFiles , false);
-
+    inputs.addEventListener('change', handleFiles, false);
 }
 
 
@@ -194,8 +200,7 @@ function editFile(){
          }
      }
 
-     console.log(moduleArray);
-     let formData = { masterKey, chain, hotelId, data : moduleArray }
+     let formData = { masterKey, chain, hotelId, data: moduleArray }
  
      const headers = new Headers();
      headers.append('Content-Type' , 'application/json') ;
@@ -215,7 +220,6 @@ function editFile(){
             return res.json();
         })
         .then(body => {
-
             let a = document.createElement('a');
          /* generate the file as link from download data stream */
          //let blob = new Blob([body .file], { type: 'application/json' });
@@ -223,7 +227,6 @@ function editFile(){
          /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
         
             a.href = `${hostUrl}/api/file/` + body.fileName ;
-     
             //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
             a.download = body.fileName  ;
             a.click();
