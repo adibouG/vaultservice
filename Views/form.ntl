@@ -9,11 +9,12 @@
      <script>
    // "use strict";
 
-var hostUrl = '#scheme#://#host#:#port#' ;
+let  hostUrl = 'http://127.0.0.1:3002' ;
 
 function fillForm(modules) {
-     
-    for (let i = 0; i < modules.length; i++) 
+      
+
+    for (let i = 0 ; i < modules.length ; i++) 
     {
         //get form module or create one in the ui
         let moduleIdx = i + 1 ;
@@ -22,8 +23,12 @@ function fillForm(modules) {
         if (!document.getElementById(moduleGroupId))  document.getElementById("addNodeButton").click();
 
         // extract key/pair values  from each modules
+        
+        console.log(moduleIdx)
 
         let module = modules[i] ;
+
+        console.log(moduleIdx)
 
         for (const [keyName, keyValue] of Object.entries(module))
         {
@@ -61,7 +66,8 @@ function submitToDecryptEndpoint(masterKey , values) {
          body : JSON.stringify(formData) 
      };
 
-     fetch(`${hostUrl}/api/decrypt` , options)
+     console.log(hostUrl)
+     fetch(`${hostUrl}/decrypt` , options)
         .then(res => {
            console.log(res)
            return res.json();
@@ -77,7 +83,7 @@ function submitToDecryptEndpoint(masterKey , values) {
 
 function editFile(){
 
-    let fileContent, parsedValues ;
+    let fileContent  , parsedValues ;
 
     let inputs = document.getElementById('edit');
     let actualBtn = document.getElementById('editFileBtn');
@@ -87,6 +93,9 @@ function editFile(){
     
     function handleFiles(){
         const file = this.files[0]; 
+        
+       // if (masterKey) actualBtn.textContent =  file.name ;
+
         //read the file
         const reader = new FileReader() ;
         
@@ -96,13 +105,13 @@ function editFile(){
             console.log(fileContent);
             parsedValues = JSON.parse(fileContent) ;
             
-            return submitToDecryptEndpoint(masterKey, parsedValues) ;
+            return submitToDecryptEndpoint(masterKey , parsedValues) ;
         });
 
         reader.readAsText(file);
     }
         
-    inputs.addEventListener('change', handleFiles, false);
+    inputs.addEventListener('change', handleFiles , false);
 
 }
 
@@ -185,32 +194,36 @@ function editFile(){
          }
      }
 
+     console.log(moduleArray);
      let formData = { masterKey, chain, hotelId, data : moduleArray }
-    
+ 
      const headers = new Headers();
-     headers.append('Content-Type', 'application/json') ;
+     headers.append('Content-Type' , 'application/json') ;
 
      const options = {
          method: 'POST', 
-         headers: headers, 
+         headers: headers , 
          body : JSON.stringify(formData) 
      };
 
-    
-     console.log(JSON.stringify(formData))
-     fetch(`${hostUrl}/api/encrypt`, options)
+     
+     console.log(hostUrl)
+     fetch(`${hostUrl}/encrypt` , options)
         .then(res => {
+
             version = res.headers.has('version')? res.headers.get('version') : version ;
             return res.json();
         })
         .then(body => {
+
             let a = document.createElement('a');
          /* generate the file as link from download data stream */
          //let blob = new Blob([body .file], { type: 'application/json' });
          //let objectURL = window.URL.createObjectURL(blob);
          /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
         
-            a.href = `${hostUrl}/api/file/` + body.fileName ;
+            a.href = `${hostUrl}/file/` + body.fileName ;
+     
             //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
             a.download = body.fileName  ;
             a.click();
@@ -225,7 +238,9 @@ function editFile(){
  function lockMasterKeyFunc()
  {
      let checkBox = document.getElementById("idLockMasterKey");
-     let inputControl = document.getElementById("masterKey")
+     let inputControl = document.getElementById("masterKey");
+  
+     
      if (checkBox.checked === true){
          inputControl.disabled = true;
      } else {
