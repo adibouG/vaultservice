@@ -23,7 +23,6 @@ function fillForm(modules) {
             let tempmodule = [];
             for (let i of Object.values(modules)){ tempmodule.push(i); }
             modules = tempmodule;
-            
     }
 
     
