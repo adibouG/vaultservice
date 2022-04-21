@@ -49,6 +49,6 @@ app.use(api);
 //start the app server on defined port 
 app.listen(port, host, () => {
   
-    winstonLogger.log('info' , 'enzovault app is running at ' + scheme +  host + port);
+    winstonLogger.log('info', 'enzovault app is running at ' + scheme +  host + port);
     console.log('enzovault app is running at %s://%s:%s', scheme, host, port);
 });

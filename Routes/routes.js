@@ -2,10 +2,10 @@ const api = require('express').Router();
 const { encryptToEnzoVaultFile, decryptFromEnzoVaultFile, downloadEnzoVaultFile } = require('../Controllers/enzoVault.js');
 
 //endpoint to encrypt and decrypt 
-api.post('/encrypt', encryptToEnzoVaultFile);
-api.post('/decrypt', decryptFromEnzoVaultFile);
+api.post('/api/encrypt', encryptToEnzoVaultFile);
+api.post('/api/decrypt', decryptFromEnzoVaultFile);
 //endpoint to download the file
-api.get('/file/:name', downloadEnzoVaultFile);
+api.get('/api/file/:name', downloadEnzoVaultFile);
 //service health check endpoint 
 api.get('/health', (req, res) => res.status(200).send('OK'));
 //endpoint serving the rendered form (with url from env) 

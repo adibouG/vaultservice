@@ -11,17 +11,9 @@
 
 var hostUrl = '#scheme#://#host#:#port#' ;
 
-function fillForm(modulesData) {
-      console.log(modulesData)
-      let chain = modulesData.chain;
-      delete modulesData.chain;
-      let hotelId = modulesData.hotelId;
-      delete modulesData.hotelId;
-      let modules = modulesData;
-           document.getElementById("chain").value = chain;
-           document.getElementById("hotelId").value = hotelId;
-      console.log(modules)
-    for (let i = 0; i < Object.keys(modules).length; i++) 
+function fillForm(modules) {
+     
+    for (let i = 0; i < modules.length; i++) 
     {
         //get form module or create one in the ui
         let moduleIdx = i + 1 ;
@@ -69,9 +61,7 @@ function submitToDecryptEndpoint(masterKey , values) {
          body : JSON.stringify(formData) 
      };
 
-     console.log(hostUrl)
-     console.log(JSON.stringify(formData))
-     fetch(`${hostUrl}/decrypt` , options)
+     fetch(`${hostUrl}/api/decrypt` , options)
         .then(res => {
            console.log(res)
            return res.json();
@@ -208,7 +198,7 @@ function editFile(){
 
     
      console.log(JSON.stringify(formData))
-     fetch(`${hostUrl}/encrypt`, options)
+     fetch(`${hostUrl}/api/encrypt`, options)
         .then(res => {
             version = res.headers.has('version')? res.headers.get('version') : version ;
             return res.json();
@@ -220,7 +210,7 @@ function editFile(){
          //let objectURL = window.URL.createObjectURL(blob);
          /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
         
-            a.href = `${hostUrl}/file/` + body.fileName ;
+            a.href = `${hostUrl}/api/file/` + body.fileName ;
             //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
             a.download = body.fileName  ;
             a.click();
