@@ -39,12 +39,12 @@ app.engine('ntl', (filePath, options, callback) => { // define a template engine
     let rendered = content.toString()
                     .replace('#scheme#', scheme)
                     .replace('#host#', host)
-                    .replace('#port#', port)
+                    .replace('#port#', port);
     return callback(null, rendered);
   });
 });
-app.set('views', './Views') // specify the views directory
-app.set('view engine', 'ntl') // register the template engine
+app.set('views', './Views'); // specify the views directory
+app.set('view engine', 'ntl'); // register the template engine
 app.use(api);
 //start the app server on defined port 
 app.listen(port, host, () => {

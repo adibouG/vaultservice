@@ -3,241 +3,174 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="css/encryptionForm.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   
-     <script>
-   // "use strict";
+    <script>
+    let hostUrl = '#scheme#://#host#:#port#' ;
 
-let hostUrl = '#scheme#://#host#:#port#' ;
-
-function fillForm(modules) {
-    if (!Array.isArray(modules)) {
-        let key = document.getElementById("chain");
-        key.value =  modules.chain;
-        delete modules.chain;
-        key = document.getElementById("hotelId");
-        key.value = modules.hotelId;
-        delete modules.hotelId;
-        console.log(modules)
-        let tempmodule = [];
-        for (let i of Object.values(modules)){ tempmodule.push(i); }
-        modules = tempmodule;
-    }
-
+    function fillForm(modules) {
+        if (!Array.isArray(modules)) {
+            let key = document.getElementById("chain");
+            key.value =  modules.chain;
+            delete modules.chain;
+            key = document.getElementById("hotelId");
+            key.value = modules.hotelId;
+            delete modules.hotelId;
+            let tempmodule = [];
+            for (let i of Object.values(modules)){ tempmodule.push(i); }
+            modules = tempmodule;
+        }
     
-    for (let i = 0 ; i < modules.length ; i++) {
-        //get form module or create one in the ui
-        let moduleIdx = i + 1 ;
-        let moduleGroupId  = `moduleGroup${moduleIdx}` ;
-
-        if (!document.getElementById(moduleGroupId))  document.getElementById("addNodeButton").click();
-
-        // extract key/pair values  from each modules
-        
-        console.log(moduleIdx)
-
-        let module = modules[i] ;
-
-        console.log(moduleIdx)
-
-        for (const [keyName, keyValue] of Object.entries(module))
-        {
-            console.log( keyName + ', ' + keyValue)
-            console.log( keyName + moduleIdx )
-            if (keyName !== "urls") { 
-                document.getElementById(keyName + moduleIdx).value = keyValue ;
-            }
-            else {
-                for (let u = 0 ; u < keyValue.length ; u++)  {
-                   
-                    if ( u === 0 ) document.getElementById('urlA' + moduleIdx  ).value = keyValue ;
-                    if ( u === 1 ) document.getElementById('urlB' + moduleIdx  ).value = keyValue ;
+        for (let i = 0 ; i < modules.length ; i++) {
+            //get form module or create one in the ui
+            let moduleIdx = i + 1 ;
+            let moduleGroupId  = `moduleGroup${moduleIdx}`;
+            if (!document.getElementById(moduleGroupId)) { document.getElementById("addNodeButton").click(); }
+            // extract key/pair values  from each modules
+            let module = modules[i] ;
+            for (const [keyName, keyValue] of Object.entries(module)) {
+                if (keyName !== "urls") { 
+                    document.getElementById(keyName + moduleIdx).value = keyValue ;
                 }
-            } 
+                else {
+                    for (let u = 0 ; u < keyValue.length ; u++)  {
+                        if (u === 0) document.getElementById('urlA' + moduleIdx).value = keyValue ;
+                        if (u === 1) document.getElementById('urlB' + moduleIdx).value = keyValue ;
+                    }
+                } 
+            }
         }
     }
-}
+
+    function submitToDecryptEndpoint(masterKey, values) {
+        let formData = { masterKey, ...values }
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json') ;
+        const options = {
+             method: 'POST', 
+             headers: headers , 
+             body : JSON.stringify(formData) 
+         };
+         console.log(hostUrl)
+         fetch(`${hostUrl}/api/decrypt`, options)
+            .then(res => {
+               console.log(res)
+               return res.json();
+             })
+            .then(modules => {
+                   console.log(modules)
+                    //fill the form with the returned values 
+                   return fillForm(modules);
+            })
+            .catch(err => console.log(JSON.stringify(err)));
+    }
 
 
+    function editFile(){
+        let fileContent, parsedValues ;
+        let inputs = document.getElementById('edit');
+        let actualBtn = document.getElementById('editFileBtn');
+        let masterKey =  document.getElementById("masterKey").value;
+        if (!masterKey) { 
+            alert('missing masterKey value') ;
+            e.stopEvent();
+            e.stopPropagation();
+            e.preventDefault();
+            return;
+        }
 
+        function handleFiles(){
+            const file = this.files[0];      
+            const reader = new FileReader() ;
+            reader.addEventListener('load', e => {
+                fileContent = e.target.result;
+                console.log(fileContent);
+                parsedValues = JSON.parse(fileContent) ;
+                return submitToDecryptEndpoint(masterKey, parsedValues) ;
+            });
+            reader.readAsText(file);
+        }
 
+        inputs.addEventListener('change', handleFiles, false);
+    }
 
-function submitToDecryptEndpoint(masterKey, values) {
-    let formData = { masterKey, ...values }
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json') ;
-    const options = {
-         method: 'POST', 
-         headers: headers , 
-         body : JSON.stringify(formData) 
-     };
+    function mySubmitFunc(e) {
+        let chain, hotelId, masterKey; 
+        let version = 1.0 ;
+        let moduleArray = [];
+        let key = document.getElementById("chain");
+        if (key && key.value) { chain = key.value; }
+        key = document.getElementById("hotelId");
+        if (key && key.value) { hotelId = key.value; }
+        key = document.getElementById("masterKey");
+        if (key && key.value) { masterKey = key.value; }
+        let numOfElmnts = document.getElementsByClassName("propertyGroupContainer").length
+        for (let n = 1; n <= numOfElmnts; n++) {
+            let moduleObject = {"module": "", "credentialSet": "", "urls":[], "username": "", "password": "", "cryptoKey": ""};
+            key = document.getElementById("module" + n);
+            if (key && key.value) {
+                moduleObject.module = key.value;
+                key = document.getElementById("credentialSet" + n);
+                if (key && key.value) { moduleObject.credentialSet = key.value; }
+                key = document.getElementById("urlA" + n);
+                if (key && key.value) { moduleObject.urls.push(key.value); }
+                key = document.getElementById("urlB" + n);
+                if (key && key.value) { moduleObject.urls.push(key.value); }
+                key = document.getElementById("username" + n);
+                if (key && key.value) { moduleObject.username = key.value; }
+                key = document.getElementById("password" + n);
+                if (key && key.value) { moduleObject.password = key.value; }
+                key = document.getElementById("cryptoKey" + n);
+                if (key && key.value) { moduleObject.cryptoKey = key.value; }
+                moduleArray.push(moduleObject);
+            }
+        }
+        const formData = { masterKey, chain, hotelId, data: moduleArray };
+        const headers = new Headers();
+        headers.append('Content-Type' , 'application/json');
+        const options = {
+            method: 'POST', 
+            headers: headers , 
+            body : JSON.stringify(formData) 
+        };
 
-     console.log(hostUrl)
-     fetch(`${hostUrl}/api/decrypt`, options)
+        fetch(`${hostUrl}/api/encrypt` , options)
         .then(res => {
-           console.log(res)
-           return res.json();
-         })
-        .then(modules => {
-               console.log(modules)
-                //fill the form with the returned values 
-               return fillForm(modules);
+            version = res.headers.has('version')? res.headers.get('version') : version ;
+            return res.json();
         })
-        .catch(err => console.log(JSON.stringify(err)));
-}
-
-
-function editFile(){
-
-    let fileContent, parsedValues ;
-    let inputs = document.getElementById('edit');
-    let actualBtn = document.getElementById('editFileBtn');
-    let masterKey =  document.getElementById("masterKey").value;
-    if (!masterKey) { 
-        alert('missing masterKey value') ;
-        e.stopEvent() ;
-        return;
+        .then(body => {
+            let a = document.createElement('a');
+            /* generate the file as link from download data stream */
+            //let blob = new Blob([body .file], { type: 'application/json' });
+            //let objectURL = window.URL.createObjectURL(blob);
+            /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
+            a.href = `${hostUrl}/api/file/` + body.fileName ;
+            //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
+            a.download = body.fileName  ;
+            a.click();
+            return;
+        })
+        .catch(err => { 
+            console.log(err);
+            alert(JSON.stringify(err));
+        })
     }
-    
-    function handleFiles(){
-        const file = this.files[0];      
-        //if (masterKey) actualBtn.textContent = file.name ;
-        //read the file
-        const reader = new FileReader() ;
-        reader.addEventListener('load', e => {
-            fileContent = e.target.result;
-            console.log(fileContent);
-            parsedValues = JSON.parse(fileContent) ;
-            return submitToDecryptEndpoint(masterKey, parsedValues) ;
-        });
-        reader.readAsText(file);
+
+    function lockMasterKeyFunc() {
+        let checkBox = document.getElementById("idLockMasterKey");
+        let inputControl = document.getElementById("masterKey");
+        if (checkBox.checked === true){ inputControl.disabled = true; }
+        else { inputControl.disabled = false; }
     }
-    inputs.addEventListener('change', handleFiles, false);
-}
 
- function mySubmitFunc(e) {
-     //e.preventDefault();
-     let version = 1.0 ;
-     let chain; 
-     let hotelId; 
-     let masterKey; 
-     let moduleArray = [];
-     let key = document.getElementById("chain");
-     if (key && key.value) 
-     {
-         chain = key.value;
-     }
-
-     key = document.getElementById("hotelId");
-     if (key && key.value) 
-     {
-         hotelId = key.value;
-     }
-
-     key = document.getElementById("masterKey");
-     if (key && key.value) 
-     {
-         masterKey = key.value;
-     }
-
-    let numOfElmnts = document.getElementsByClassName("propertyGroupContainer").length
-    for (let n = 1; n <= numOfElmnts; n++) {
-         let moduleObject = {"module": "", "credentialSet": "", "urls":[], "username": "", "password": "", "cryptoKey": ""};
-         key = document.getElementById("module" + n);
-         
-         if (key && key.value)
-         {
-             moduleObject.module = key.value;
-
-             key = document.getElementById("credentialSet" + n);
-             if (key && key.value) 
-             {
-                 moduleObject.credentialSet = key.value;
-             }
-
-             key = document.getElementById("urlA" + n);
-             if (key && key.value) 
-             {
-                
-                 moduleObject.urls.push(key.value);
-             }
-
-             key = document.getElementById("urlB" + n);
-             if (key && key.value) 
-             {
-             
-                moduleObject.urls.push(key.value);
-             }
-             key = document.getElementById("username" + n);
-             if (key && key.value) {
-                 moduleObject.username = key.value;
-             }
-            key = document.getElementById("password" + n);
-            if (key && key.value) {
-                moduleObject.password = key.value;
-            }
-            key = document.getElementById("cryptoKey" + n);
-            if (key && key.value) {
-                moduleObject.cryptoKey = key.value;
-            }
-            moduleArray.push(moduleObject);
+    function deleteModule(e) {
+        if (e.target.closest('.cross')) {
+            let module = e.target.closest('.cross').parentNode;
+            let form = module.parentNode;
+            if (form.children.length > 4) { form.removeChild(module); }
         }
     }
-    const formData = { masterKey, chain, hotelId, data: moduleArray } 
-    const headers = new Headers();
-    headers.append('Content-Type' , 'application/json') ;
-    const options = {
-        method: 'POST', 
-        headers: headers , 
-        body : JSON.stringify(formData) 
-    };
-
-    fetch(`${hostUrl}/api/encrypt` , options)
-    .then(res => {
-        version = res.headers.has('version')? res.headers.get('version') : version ;
-        return res.json();
-    })
-    .then(body => {
-        let a = document.createElement('a');
-        /* generate the file as link from download data stream */
-        //let blob = new Blob([body .file], { type: 'application/json' });
-        //let objectURL = window.URL.createObjectURL(blob);
-        /* or get the file name and use the server get file endpoint with the filename (need to be stored on the server side before)*/ 
-        
-        a.href = `${hostUrl}/api/file/` + body.fileName ;
-        //a.href = "data:application/json,"+ encodeURIComponent(objectURL);
-        a.download = body.fileName  ;
-        a.click();
-        return;
-    })
-    .catch(err => { 
-        console.log(err);
-        alert(JSON.stringify(err));
-    })
-}
-
-function lockMasterKeyFunc() {
-    let checkBox = document.getElementById("idLockMasterKey");
-    let inputControl = document.getElementById("masterKey");
-    if (checkBox.checked === true){
-        inputControl.disabled = true;
-    }
-    else {
-        inputControl.disabled = false;
-    }
-}
-
-function deleteModule(e) {
-    if (e.target.closest('.cross'))  {
-        let module = e.target.closest('.cross').parentNode;
-        let form = module.parentNode;
-        if (form.children.length > 4) {
-            form.removeChild(module) ;
-        }
-    }
-}
-</script>
+    </script>
 </head>
 <body>
     <div class="title">Encryption Tool</div> 
@@ -304,7 +237,7 @@ function deleteModule(e) {
         <div class="encryptContainer">
             <div class="propertyContainer">
                 <label class="btn edit" for="edit" id="editFileBtn">EDIT</label>
-                <input  type="file" name="edit" id="edit" class="hidden" onClick="editFile()" hidden/> 
+                <input  type="file" name="edit" id="edit" class="hidden" accept=".enzovault"  onClick="editFile()" hidden/> 
             </div>
   
          
@@ -326,7 +259,5 @@ function deleteModule(e) {
     </div>
 
   <script type="text/javascript" src="js/jsfunctions.js" ></script>
-   
-
 </body>
 </html>
