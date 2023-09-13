@@ -1,15 +1,12 @@
-**ENZOVAULT SERVER**
+**VAULT SERVER**
 
-This is a first solution to encrypt and generate the enzovault file , based on a nodejs http server and express framework to serve the implemented functionalities via an API based on HTTP and URI endpoints.
+This is a first solution to encrypt and generate the file , based on a nodejs http server and express framework to serve the implemented functionalities via an API based on HTTP and URI endpoints.
 
-An https server version can be used, (using aws without any changes or a locally with a certificate and using the node https server).
+An https server version can be used, .
 
-This application (based on this repo) is actually running and can be accessed from the Enzosystems LAN with a web-browser with the URL http://192.168.96.78:3002 .
+a web form is served to provide the values to encrypt and use in the resulting vault file.
 
-From this URL , a web form is served (designed and mostly implemented by Erik, please note that the checkboxes functionalities of this form are not fully implemented, but this point doesn't affect the file generation). This form is used to provide the values to encrypt and to use in order to generate the resulting enzovault file.
-
-The API provide the following functionalities (interacting with it via the form):
-
+The API provide 
 - _**POST /encrypt :**_
 
 **expects ->** _a POST request, with a body containing the hotelChain , hotelID , masterKey and the data to be encrypted._
